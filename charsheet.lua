@@ -93,18 +93,6 @@ savedDataTable_Dev = {
     ["coinEPTxtEntry"] = 0,
     ["coinGPTxtEntry"] = 0,
     ["coinPPTxtEntry"] = 0,
-    ["weapon1TxtEntry"] = "",
-    ["weapon2TxtEntry"] = "",
-    ["weapon3TxtEntry"] = "",
-    ["weapon4TxtEntry"] = "",
-    ["weapon5TxtEntry"] = "",
-    ["ammo1TxtEntry"] = 0,
-    ["ammo2TxtEntry"] = 0,
-    ["ammo3TxtEntry"] = 0,
-    ["potions1TxtEntry"] = 0,
-    ["potions2TxtEntry"] = 0,
-    ["potions3TxtEntry"] = 0,
-    ["potions4TxtEntry"] = 0,
     ["SaveCheckSTRCheckboxButtonIdx"] = false,
     ["SaveCheckDEXCheckboxButtonIdx"] = false,
     ["SaveCheckCONCheckboxButtonIdx"] = false,
@@ -235,19 +223,7 @@ textEntryIndexTable = {
     ["coinSPTxtEntry"] = 57,
     ["coinEPTxtEntry"] = 58,
     ["coinGPTxtEntry"] = 59,
-    ["coinPPTxtEntry"] = 60,
-    ["weapon1TxtEntry"] = 61,
-    ["weapon2TxtEntry"] = 62,
-    ["weapon3TxtEntry"] = 63,
-    ["weapon4TxtEntry"] = 64,
-    ["weapon5TxtEntry"] = 65,
-    ["ammo1TxtEntry"] = 66,
-    ["ammo2TxtEntry"] = 67,
-    ["ammo3TxtEntry"] = 68,
-    ["potions1TxtEntry"] = 69,
-    ["potions2TxtEntry"] = 70,
-    ["potions3TxtEntry"] = 71,
-    ["potions4TxtEntry"] = 72
+    ["coinPPTxtEntry"] = 60
 }
 
 checkboxSpawnIndexTable = {
@@ -510,7 +486,7 @@ function createAllTextboxes()
     createTextBox("infoAgeTxtEntry", {0.51, UI_Y_COORD, -2.47}, ONE_ROW, 440, 100, "", NO_LABEL, CENTER_ALIGNED_TEXT, IS_TEXT_ENTRY, color(255, 255, 255, 255))
     createTextBox("infoHeightTxtEntry", {1.345, UI_Y_COORD, -2.47}, ONE_ROW, 520, 100, "", NO_LABEL, CENTER_ALIGNED_TEXT, IS_TEXT_ENTRY, color(255, 255, 255, 255))
     createTextBox("infoWeightTxtEntry", {2.27, UI_Y_COORD, -2.47}, ONE_ROW, 540, 100, "", NO_LABEL, CENTER_ALIGNED_TEXT, IS_TEXT_ENTRY, color(255, 255, 255, 255))
-    createTextBox("infoSkinTxtEntry", {3.14, UI_Y_COORD, -2.56}, 2, 460, 100, "", NO_LABEL, CENTER_ALIGNED_TEXT, IS_TEXT_ENTRY, color(255, 255, 255, 255))
+    createTextBox("infoSkinTxtEntry", {3.14, UI_Y_COORD, -2.56}, 2, 460, 100, "", NO_LABEL, CENTER_ALIGNED_TEXT, IS_NUMERIC_ENTRY, color(255, 255, 255, 255))
     createTextBox("infoHairTxtEntry", {3.95, UI_Y_COORD, -2.56}, 2, 460, 100, "", NO_LABEL, CENTER_ALIGNED_TEXT, IS_TEXT_ENTRY, color(255, 255, 255, 255))
     createTextBox("infoEyesTxtEntry", {4.75, UI_Y_COORD, -2.56}, 2, 460, 100, "", NO_LABEL, CENTER_ALIGNED_TEXT, IS_TEXT_ENTRY, color(255, 255, 255, 255))
     createTextBox("ExperienceTxtEntry", {5.84, UI_Y_COORD, -2.59}, ONE_ROW, 820, STANDARD_FONT_SIZE, "", NO_LABEL, CENTER_ALIGNED_TEXT, IS_TEXT_ENTRY, color(255, 255, 255, 255))
@@ -793,27 +769,6 @@ function updateCalculatedValues()
         if classLVL1 == nil then classLVL1 = 0 end
         if classLVL2 == nil then classLVL2 = 0 end
         totalLVL = classLVL1 + classLVL2
-        if totalLVL == 1 then ExpLVLUP = "300"
-        elseif totalLVL == 2 then ExpLVLUP = "900"
-        elseif totalLVL == 3 then ExpLVLUP = "2,700"
-        elseif totalLVL == 4 then ExpLVLUP = "6,500"
-        elseif totalLVL == 5 then ExpLVLUP = "14,000"
-        elseif totalLVL == 6 then ExpLVLUP = "23,000"
-        elseif totalLVL == 7 then ExpLVLUP = "34,000"
-        elseif totalLVL == 8 then ExpLVLUP = "48,000"
-        elseif totalLVL == 9 then ExpLVLUP = "64,000"
-        elseif totalLVL == 10 then ExpLVLUP = "85,000"
-        elseif totalLVL == 11 then ExpLVLUP = "100,000"
-        elseif totalLVL == 12 then ExpLVLUP = "120,000"
-        elseif totalLVL == 13 then ExpLVLUP = "140,000"
-        elseif totalLVL == 14 then ExpLVLUP = "165,000"
-        elseif totalLVL == 15 then ExpLVLUP = "195,000"
-        elseif totalLVL == 16 then ExpLVLUP = "225,000"
-        elseif totalLVL == 17 then ExpLVLUP = "265,000"
-        elseif totalLVL == 18 then ExpLVLUP = "305,000"
-        elseif totalLVL == 19 then ExpLVLUP = "355,000"
-        elseif totalLVL >= 20 then ExpLVLUP = "max"
-        end
         self.editButton({index = displayNumberIndex["totalLVLDisplayIdx"], label = tostring(totalLVL)})
         self.editButton({index = displayNumberIndex["ExpLVLUPDisplayIdx"], label = tostring(ExpLVLUP)})
         -- STR, DEX, CON, INT, WIS, CHA
@@ -1068,7 +1023,7 @@ function updateCalculatedValues()
         self.editButton({index = displayNumberIndex["SleightofHandModDisplayIdx"], label = tostring(DEXmod)})
         self.editButton({index = displayNumberIndex["StealthModDisplayIdx"], label = tostring(DEXmod)})
         self.editButton({index = displayNumberIndex["SurvivalModDisplayIdx"], label = tostring(WISmod)})
-        PassivePerception = 10 + PerceptionTotal
+        PassivePerception = 10 + PerceptionTotal + infoSkin
         self.editButton({index = displayNumberIndex["PassivePerceptionDisplayIdx"], label = tostring(PassivePerception)})
         --
         Initiative = DEXmod
@@ -1085,91 +1040,30 @@ function updateCalculatedValues()
         SpellAtkBonus2 = 0
         HitDiceClass1 = ""
         HitDiceClass2 = ""
-        if savedDataTable.className1 ~= nil and savedDataTable.className1 == tostring("Draconic Bloodline Sorcerer") or savedDataTable.className1 == tostring("Wild Magic Sorcerer") or savedDataTable.className1 == tostring("Divine Soul Sorcerer") or savedDataTable.className1 == tostring("Shadow Magic Sorcerer") or savedDataTable.className1 == tostring("Storm Sorcery Sorcerer") or savedDataTable.className1 == tostring("Wizard") or savedDataTable.className1 == tostring("Abjuration Wizard") or savedDataTable.className1 == tostring("Conjuration Wizard") or savedDataTable.className1 == tostring("Divination Wizard") or savedDataTable.className1 == tostring("Enchantment Wizard") or savedDataTable.className1 == tostring("Evocation Wizard") or savedDataTable.className1 == tostring("Illusion Wizard") or savedDataTable.className1 == tostring("Necromancy Wizard") or savedDataTable.className1 == tostring("Transmutation Wizard") or savedDataTable.className1 == tostring("War Magic Wizard") then
+        if savedDataTable.className1 ~= nil and savedDataTable.className1 == tostring("Sorcerer") or savedDataTable.className1 == tostring("Wizard") then
             HitDiceClass1 = tostring("d6")
-        elseif savedDataTable.className1 ~= nil and savedDataTable.className1 == tostring("Bard") or savedDataTable.className1 == tostring("Lore Bard") or savedDataTable.className1 == tostring("Valor Bard") or savedDataTable.className1 == tostring("Glamour Bard") or savedDataTable.className1 == tostring("Swords Bard") or savedDataTable.className1 == tostring("Whispers Bard") or savedDataTable.className1 == tostring("Knowledge Cleric") or savedDataTable.className1 == tostring("Life Cleric") or savedDataTable.className1 == tostring("Light Cleric") or savedDataTable.className1 == tostring("Nature Cleric") or savedDataTable.className1 == tostring("Tempest Cleric") or savedDataTable.className1 == tostring("Trickery Cleric") or savedDataTable.className1 == tostring("War Cleric") or savedDataTable.className1 == tostring("Death Cleric") or savedDataTable.className1 == tostring("Forge Cleric") or savedDataTable.className1 == tostring("Grave Cleric") or savedDataTable.className1 == tostring("Druid") or savedDataTable.className1 == tostring("Land Druid") or savedDataTable.className1 == tostring("Moon Druid") or savedDataTable.className1 == tostring("Dreams Druid") or savedDataTable.className1 == tostring("Shepherd Druid") or savedDataTable.className1 == tostring("Monk") or savedDataTable.className1 == tostring("Open Hand Monk") or savedDataTable.className1 == tostring("Shadow Monk") or savedDataTable.className1 == tostring("Four Elements Monk") or savedDataTable.className1 == tostring("Drunken Master Monk") or savedDataTable.className1 == tostring("Kensei Monk") or savedDataTable.className1 == tostring("Sun Soul Monk") or savedDataTable.className1 == tostring("Rogue") or savedDataTable.className1 == tostring("Thief Rogue") or savedDataTable.className1 == tostring("Assassin Rogue") or savedDataTable.className1 == tostring("Arcane Trickster Rogue") or savedDataTable.className1 == tostring("Inquisitive Rogue") or savedDataTable.className1 == tostring("Mastermind Rogue") or savedDataTable.className1 == tostring("Scout Rogue") or savedDataTable.className1 == tostring("Swashbuckler Rogue") or savedDataTable.className1 == tostring("The Archfey Warlock") or savedDataTable.className1 == tostring("The Fiend Warlock") or savedDataTable.className1 == tostring("The Great Old One Warlock") or savedDataTable.className1 == tostring("The Celestial Warlock") or savedDataTable.className1 == tostring("The Hexblade Warlock") then
+        elseif savedDataTable.className1 ~= nil and savedDataTable.className1 == tostring("Bard") or savedDataTable.className1 == tostring("Monk") or savedDataTable.className1 == tostring("Druid") or savedDataTable.className1 == tostring("Rogue") or savedDataTable.className1 == tostring("Cleric") or savedDataTable.className1 == tostring("Warlock") or savedDataTable.className1 == tostring("Artificer") then
             HitDiceClass1 = tostring("d8")
-        elseif savedDataTable.className1 ~= nil and savedDataTable.className1 == tostring("Fighter") or savedDataTable.className1 == tostring("Champion Fighter") or savedDataTable.className1 == tostring("Battle Master Fighter (str)") or savedDataTable.className1 == tostring("Battle Master Fighter (dex)") or savedDataTable.className1 == tostring("Eldritch Knight Fighter") or savedDataTable.className1 == tostring("Psi Warrior Fighter") or savedDataTable.className1 == tostring("Rune Knight Fighter") or savedDataTable.className1 == tostring("Arcane Archer Fighter") or savedDataTable.className1 == tostring("Cavalier Fighter") or savedDataTable.className1 == tostring("Samurai Fighter") or savedDataTable.className1 == tostring("Paladin") or savedDataTable.className1 == tostring("Devotion Paladin") or savedDataTable.className1 == tostring("Ancients Paladin") or savedDataTable.className1 == tostring("Vengeance Paladin") or savedDataTable.className1 == tostring("Oathbreaker Paladin") or savedDataTable.className1 == tostring("Conquest Paladin") or savedDataTable.className1 == tostring("Redemption Paladin") or savedDataTable.className1 == tostring("Ranger") or savedDataTable.className1 == tostring("Hunter Ranger") or savedDataTable.className1 == tostring("Beast Master Ranger") or savedDataTable.className1 == tostring("Gloom Stalker Ranger") or savedDataTable.className1 == tostring("Horizon Walker Ranger") or savedDataTable.className1 == tostring("Monster Slayer Ranger") then
+        elseif savedDataTable.className1 ~= nil and savedDataTable.className1 == tostring("Fighter") or savedDataTable.className1 == tostring("Paladin") or savedDataTable.className1 == tostring("Ranger") then
             HitDiceClass1 = tostring("d10")
-        elseif savedDataTable.className1 ~= nil and savedDataTable.className1 == tostring("Barbarian") or savedDataTable.className1 == tostring("Berserker Barbarian") or savedDataTable.className1 == tostring("Wild Magic Barbarian")or savedDataTable.className1 == tostring("Totem Warrior Barbarian") or savedDataTable.className1 == tostring("Ancestral Guardian Barbarian") or savedDataTable.className1 == tostring("Storm Herald Barbarian") or savedDataTable.className1 == tostring("Zealot Barbarian") then
+        elseif savedDataTable.className1 ~= nil and savedDataTable.className1 == tostring("Barbarian") then
             HitDiceClass1 = tostring("d12")
         elseif savedDataTable.className1 ~= nil and savedDataTable.className1 == tostring("") then
             HitDiceClass1 = tostring("")
         end
-        if savedDataTable.className2 ~= nil and savedDataTable.className2 == tostring("Draconic Bloodline Sorcerer") or savedDataTable.className2 == tostring("Wild Magic Sorcerer") or savedDataTable.className2 == tostring("Divine Soul Sorcerer") or savedDataTable.className2 == tostring("Shadow Magic Sorcerer") or savedDataTable.className2 == tostring("Storm Sorcery Sorcerer") or savedDataTable.className2 == tostring("Wizard") or savedDataTable.className2 == tostring("Abjuration Wizard") or savedDataTable.className2 == tostring("Conjuration Wizard") or savedDataTable.className2 == tostring("Divination Wizard") or savedDataTable.className2 == tostring("Enchantment Wizard") or savedDataTable.className2 == tostring("Evocation Wizard") or savedDataTable.className2 == tostring("Illusion Wizard") or savedDataTable.className2 == tostring("Necromancy Wizard") or savedDataTable.className2 == tostring("Transmutation Wizard") or savedDataTable.className2 == tostring("War Magic Wizard") then
+        if savedDataTable.className2 ~= nil and savedDataTable.className2 == tostring("Sorcerer") or savedDataTable.className2 == tostring("Wizard") then
             HitDiceClass2 = tostring("d6")
-        elseif savedDataTable.className2 ~= nil and savedDataTable.className2 == tostring("Bard") or savedDataTable.className2 == tostring("Lore Bard") or savedDataTable.className2 == tostring("Valor Bard") or savedDataTable.className2 == tostring("Glamour Bard") or savedDataTable.className2 == tostring("Swords Bard") or savedDataTable.className2 == tostring("Whispers Bard") or savedDataTable.className2 == tostring("Knowledge Cleric") or savedDataTable.className2 == tostring("Life Cleric") or savedDataTable.className2 == tostring("Light Cleric") or savedDataTable.className2 == tostring("Nature Cleric") or savedDataTable.className2 == tostring("Tempest Cleric") or savedDataTable.className2 == tostring("Trickery Cleric") or savedDataTable.className2 == tostring("War Cleric") or savedDataTable.className2 == tostring("Death Cleric") or savedDataTable.className2 == tostring("Forge Cleric") or savedDataTable.className2 == tostring("Grave Cleric") or savedDataTable.className2 == tostring("Druid") or savedDataTable.className2 == tostring("Land Druid") or savedDataTable.className2 == tostring("Moon Druid") or savedDataTable.className2 == tostring("Dreams Druid") or savedDataTable.className2 == tostring("Shepherd Druid") or savedDataTable.className2 == tostring("Monk") or savedDataTable.className2 == tostring("Open Hand Monk") or savedDataTable.className2 == tostring("Shadow Monk") or savedDataTable.className2 == tostring("Four Elements Monk") or savedDataTable.className2 == tostring("Drunken Master Monk") or savedDataTable.className2 == tostring("Kensei Monk") or savedDataTable.className2 == tostring("Sun Soul Monk") or savedDataTable.className2 == tostring("Rogue") or savedDataTable.className2 == tostring("Thief Rogue") or savedDataTable.className2 == tostring("Assassin Rogue") or savedDataTable.className2 == tostring("Arcane Trickster Rogue") or savedDataTable.className2 == tostring("Inquisitive Rogue") or savedDataTable.className2 == tostring("Mastermind Rogue") or savedDataTable.className2 == tostring("Scout Rogue") or savedDataTable.className2 == tostring("Swashbuckler Rogue") or savedDataTable.className2 == tostring("The Archfey Warlock") or savedDataTable.className2 == tostring("The Fiend Warlock") or savedDataTable.className2 == tostring("The Great Old One Warlock") or savedDataTable.className2 == tostring("The Celestial Warlock") or savedDataTable.className2 == tostring("The Hexblade Warlock") then
+        elseif savedDataTable.className2 ~= nil and savedDataTable.className2 == tostring("Bard") or savedDataTable.className2 == tostring("Monk") or savedDataTable.className2 == tostring("Druid") or savedDataTable.className2 == tostring("Rogue") or savedDataTable.className2 == tostring("Cleric") or savedDataTable.className2 == tostring("Warlock") or savedDataTable.className2 == tostring("Artificer") then
             HitDiceClass2 = tostring("d8")
-        elseif savedDataTable.className2 ~= nil and savedDataTable.className2 == tostring("Fighter") or savedDataTable.className2 == tostring("Champion Fighter") or savedDataTable.className2 == tostring("Battle Master Fighter (str)") or savedDataTable.className2 == tostring("Battle Master Fighter (dex)") or savedDataTable.className2 == tostring("Psi Warrior Fighter") or savedDataTable.className2 == tostring("Eldritch Knight Fighter") or savedDataTable.className2 == tostring("Rune Knight Fighter") or savedDataTable.className2 == tostring("Arcane Archer Fighter") or savedDataTable.className2 == tostring("Cavalier Fighter") or savedDataTable.className2 == tostring("Samurai Fighter") or savedDataTable.className2 == tostring("Paladin") or savedDataTable.className2 == tostring("Devotion Paladin") or savedDataTable.className2 == tostring("Ancients Paladin") or savedDataTable.className2 == tostring("Vengeance Paladin") or savedDataTable.className2 == tostring("Oathbreaker Paladin") or savedDataTable.className2 == tostring("Conquest Paladin") or savedDataTable.className2 == tostring("Redemption Paladin") or savedDataTable.className2 == tostring("Ranger") or savedDataTable.className2 == tostring("Hunter Ranger") or savedDataTable.className2 == tostring("Beast Master Ranger") or savedDataTable.className2 == tostring("Gloom Stalker Ranger") or savedDataTable.className2 == tostring("Horizon Walker Ranger") or savedDataTable.className2 == tostring("Monster Slayer Ranger") then
+        elseif savedDataTable.className2 ~= nil and savedDataTable.className2 == tostring("Fighter") or savedDataTable.className2 == tostring("Paladin") or savedDataTable.className2 == tostring("Ranger") or 
             HitDiceClass2 = tostring("d10")
-        elseif savedDataTable.className2 ~= nil and savedDataTable.className2 == tostring("Barbarian") or savedDataTable.className2 == tostring("Berserker Barbarian") or savedDataTable.className2 == tostring("Wild Magic Barbarian") or savedDataTable.className2 == tostring("Totem Warrior Barbarian") or savedDataTable.className2 == tostring("Ancestral Guardian Barbarian") or savedDataTable.className2 == tostring("Storm Herald Barbarian") or savedDataTable.className2 == tostring("Zealot Barbarian") then
+        elseif savedDataTable.className2 ~= nil and savedDataTable.className2 == tostring("Barbarian") then
             HitDiceClass2 = tostring("d12")
         elseif savedDataTable.className2 ~= nil and savedDataTable.className2 == tostring("") then
             HitDiceClass2 = tostring("")
         end
         self.editButton({index = displayNumberIndex["HitDiceClass1DisplayIdx"], label = tostring(HitDiceClass1)})
         self.editButton({index = displayNumberIndex["HitDiceClass2DisplayIdx"], label = tostring(HitDiceClass2)})
-        if savedDataTable.className1 ~= nil and savedDataTable.className1 == tostring("Wizard") or savedDataTable.className1 == tostring("Abjuration Wizard") or savedDataTable.className1 == tostring("Conjuration Wizard") or savedDataTable.className1 == tostring("Divination Wizard") or savedDataTable.className1 == tostring("Enchantment Wizard") or savedDataTable.className1 == tostring("Evocation Wizard") or savedDataTable.className1 == tostring("Illusion Wizard") or savedDataTable.className1 == tostring("Necromancy Wizard") or savedDataTable.className1 == tostring("Transmutation Wizard") or savedDataTable.className1 == tostring("War Magic Wizard") or savedDataTable.className1 == tostring("Eldritch Knight Fighter") or savedDataTable.className1 == tostring("Psi Warrior Fighter") or savedDataTable.className1 == tostring("Arcane Trickster Rogue") then
-            Caster = 8
-            SpellSaveDC1 = SpellSaveDC1 + ProfBonus + Caster + INTmod;
-            SpellAtkBonus1 = SpellAtkBonus1 + ProfBonus + INTmod;
-        elseif savedDataTable.className1 ~= nil and savedDataTable.className1 == tostring("Knowledge Cleric") or savedDataTable.className1 == tostring("Life Cleric") or savedDataTable.className1 == tostring("Light Cleric") or savedDataTable.className1 == tostring("Nature Cleric") or savedDataTable.className1 == tostring("Tempest Cleric") or savedDataTable.className1 == tostring("Trickery Cleric") or savedDataTable.className1 == tostring("War Cleric") or savedDataTable.className1 == tostring("Death Cleric") or savedDataTable.className1 == tostring("Forge Cleric") or savedDataTable.className1 == tostring("Grave Cleric") or savedDataTable.className1 == tostring("Druid") or savedDataTable.className1 == tostring("Land Druid") or savedDataTable.className1 == tostring("Moon Druid") or savedDataTable.className1 == tostring("Dreams Druid") or savedDataTable.className1 == tostring("Shepherd Druid") or savedDataTable.className1 == tostring("Monk") or savedDataTable.className1 == tostring("Open Hand Monk") or savedDataTable.className1 == tostring("Shadow Monk") or savedDataTable.className1 == tostring("Four Elements Monk") or savedDataTable.className1 == tostring("Drunken Master Monk") or savedDataTable.className1 == tostring("Kensei Monk") or savedDataTable.className1 == tostring("Sun Soul Monk") or savedDataTable.className1 == tostring("Hunter Ranger") or savedDataTable.className1 == tostring("Beast Master Ranger") or savedDataTable.className1 == tostring("Gloom Stalker Ranger") or savedDataTable.className1 == tostring("Horizon Walker Ranger") or savedDataTable.className1 == tostring("Monster Slayer Ranger") then
-            Caster = 8
-            SpellSaveDC1 = SpellSaveDC1 + ProfBonus + Caster + WISmod;
-            SpellAtkBonus1 = SpellAtkBonus1 + ProfBonus + WISmod;
-        elseif savedDataTable.className1 ~= nil and savedDataTable.className1 == tostring("Bard") or savedDataTable.className1 == tostring("Lore Bard") or savedDataTable.className1 == tostring("Valor Bard") or savedDataTable.className1 == tostring("Glamour Bard") or savedDataTable.className1 == tostring("Swords Bard") or savedDataTable.className1 == tostring("Whispers Bard") or savedDataTable.className1 == tostring("Devotion Paladin") or savedDataTable.className1 == tostring("Ancients Paladin") or savedDataTable.className1 == tostring("Vengeance Paladin") or savedDataTable.className1 == tostring("Oathbreaker Paladin") or savedDataTable.className1 == tostring("Conquest Paladin") or savedDataTable.className1 == tostring("Redemption Paladin") or savedDataTable.className1 == tostring("Draconic Bloodline Sorcerer") or savedDataTable.className1 == tostring("Wild Magic Sorcerer") or savedDataTable.className1 == tostring("Divine Soul Sorcerer") or savedDataTable.className1 == tostring("Shadow Magic Sorcerer") or savedDataTable.className1 == tostring("Storm Sorcery Sorcerer") or savedDataTable.className1 == tostring("The Archfey Warlock") or savedDataTable.className1 == tostring("The Fiend Warlock") or savedDataTable.className1 == tostring("The Great Old One Warlock") or savedDataTable.className1 == tostring("The Celestial Warlock") or savedDataTable.className1 == tostring("The Hexblade Warlock") then
-            Caster = 8
-            SpellSaveDC1 = SpellSaveDC1 + ProfBonus + Caster + CHAmod;
-            SpellAtkBonus1 = SpellAtkBonus1 + ProfBonus + CHAmod;
-        elseif savedDataTable.className1 ~= nil and savedDataTable.className1 == tostring("Rune Knight Fighter") or savedDataTable.className1 == tostring("Wild Magic Barbarian") then
-            Caster = 8
-            SpellSaveDC1 = SpellSaveDC1 + ProfBonus + Caster + CONmod;
-            SpellAtkBonus1 = "NA"
-        elseif savedDataTable.className1 ~= nil and savedDataTable.className1 == tostring("Battle Master Fighter (str)") then
-            Caster = 8
-            SpellSaveDC1 = SpellSaveDC1 + ProfBonus + Caster + STRmod;
-            SpellAtkBonus1 = "NA"
-        elseif savedDataTable.className1 ~= nil and savedDataTable.className1 == tostring("Battle Master Fighter (dex)") then
-            Caster = 8
-            SpellSaveDC1 = SpellSaveDC1 + ProfBonus + Caster + DEXmod;
-            SpellAtkBonus1 = "NA"
-        elseif savedDataTable.className1 ~= nil and savedDataTable.className1 == tostring("") or savedDataTable.className1 == tostring("Barbarian") or savedDataTable.className1 == tostring("Berserker Barbarian") or savedDataTable.className1 == tostring("Totem Warrior Barbarian") or savedDataTable.className1 == tostring("Ancestral Guardian Barbarian") or savedDataTable.className1 == tostring("Storm Herald Barbarian") or savedDataTable.className1 == tostring("Zealot Barbarian") or savedDataTable.className1 == tostring("Fighter") or savedDataTable.className1 == tostring("Champion Fighter") or savedDataTable.className1 == tostring("Arcane Archer Fighter") or savedDataTable.className1 == tostring("Cavalier Fighter") or savedDataTable.className1 == tostring("Samurai Fighter") or savedDataTable.className1 == tostring("Rogue") or savedDataTable.className1 == tostring("Thief Rogue") or savedDataTable.className1 == tostring("Assassin Rogue") or savedDataTable.className1 == tostring("Inquisitive Rogue") or savedDataTable.className1 == tostring("Mastermind Rogue") or savedDataTable.className1 == tostring("Scout Rogue") or savedDataTable.className1 == tostring("Swashbuckler Rogue") then
-            SpellSaveDC1 = "NA"
-            SpellAtkBonus1 = "NA"
-        end
-        if savedDataTable.className2 ~= nil and savedDataTable.className2 == tostring("Wizard") or savedDataTable.className2 == tostring("Abjuration Wizard") or savedDataTable.className2 == tostring("Conjuration Wizard") or savedDataTable.className2 == tostring("Divination Wizard") or savedDataTable.className2 == tostring("Enchantment Wizard") or savedDataTable.className2 == tostring("Evocation Wizard") or savedDataTable.className2 == tostring("Illusion Wizard") or savedDataTable.className2 == tostring("Necromancy Wizard") or savedDataTable.className2 == tostring("Transmutation Wizard") or savedDataTable.className2 == tostring("War Magic Wizard") or savedDataTable.className2 == tostring("Eldritch Knight Fighter") or savedDataTable.className2 == tostring("Psi Warrior Fighter") or savedDataTable.className2 == tostring("Arcane Trickster Rogue") then
-            Caster = 8
-            SpellSaveDC2 = SpellSaveDC2 + ProfBonus + Caster + INTmod;
-            SpellAtkBonus2 = SpellAtkBonus2 + ProfBonus + INTmod;
-        elseif savedDataTable.className2 ~= nil and savedDataTable.className2 == tostring("Knowledge Cleric") or savedDataTable.className2 == tostring("Life Cleric") or savedDataTable.className2 == tostring("Light Cleric") or savedDataTable.className2 == tostring("Nature Cleric") or savedDataTable.className2 == tostring("Tempest Cleric") or savedDataTable.className2 == tostring("Trickery Cleric") or savedDataTable.className2 == tostring("War Cleric") or savedDataTable.className2 == tostring("Death Cleric") or savedDataTable.className2 == tostring("Forge Cleric") or savedDataTable.className2 == tostring("Grave Cleric") or savedDataTable.className2 == tostring("Druid") or savedDataTable.className2 == tostring("Land Druid") or savedDataTable.className2 == tostring("Moon Druid") or savedDataTable.className2 == tostring("Dreams Druid") or savedDataTable.className2 == tostring("Shepherd Druid") or savedDataTable.className2 == tostring("Monk") or savedDataTable.className2 == tostring("Open Hand Monk") or savedDataTable.className2 == tostring("Shadow Monk") or savedDataTable.className2 == tostring("Four Elements Monk") or savedDataTable.className2 == tostring("Drunken Master Monk") or savedDataTable.className2 == tostring("Kensei Monk") or savedDataTable.className2 == tostring("Sun Soul Monk") or savedDataTable.className2 == tostring("Hunter Ranger") or savedDataTable.className2 == tostring("Beast Master Ranger") or savedDataTable.className2 == tostring("Gloom Stalker Ranger") or savedDataTable.className2 == tostring("Horizon Walker Ranger") or savedDataTable.className2 == tostring("Monster Slayer Ranger") then
-            Caster = 8
-            SpellSaveDC2 = SpellSaveDC2 + ProfBonus + Caster + WISmod;
-            SpellAtkBonus2 = SpellAtkBonus2 + ProfBonus + WISmod;
-        elseif savedDataTable.className2 ~= nil and savedDataTable.className2 == tostring("Bard") or savedDataTable.className2 == tostring("Lore Bard") or savedDataTable.className2 == tostring("Valor Bard") or savedDataTable.className2 == tostring("Glamour Bard") or savedDataTable.className2 == tostring("Swords Bard") or savedDataTable.className2 == tostring("Whispers Bard") or savedDataTable.className2 == tostring("Devotion Paladin") or savedDataTable.className2 == tostring("Ancients Paladin") or savedDataTable.className2 == tostring("Vengeance Paladin") or savedDataTable.className2 == tostring("Oathbreaker Paladin") or savedDataTable.className2 == tostring("Conquest Paladin") or savedDataTable.className2 == tostring("Redemption Paladin") or savedDataTable.className2 == tostring("Draconic Bloodline Sorcerer") or savedDataTable.className2 == tostring("Wild Magic Sorcerer") or savedDataTable.className2 == tostring("Divine Soul Sorcerer") or savedDataTable.className2 == tostring("Shadow Magic Sorcerer") or savedDataTable.className2 == tostring("Storm Sorcery Sorcerer") or savedDataTable.className2 == tostring("The Archfey Warlock") or savedDataTable.className2 == tostring("The Fiend Warlock") or savedDataTable.className2 == tostring("The Great Old One Warlock") or savedDataTable.className2 == tostring("The Celestial Warlock") or savedDataTable.className2 == tostring("The Hexblade Warlock") then
-            Caster = 8
-            SpellSaveDC2 = SpellSaveDC2 + ProfBonus + Caster + CHAmod;
-            SpellAtkBonus2 = SpellAtkBonus2 + ProfBonus + CHAmod;
-        elseif savedDataTable.className2 ~= nil and savedDataTable.className2 == tostring("Rune Knight Fighter") or savedDataTable.className2 == tostring("Wild Magic Barbarian") then
-            Caster = 8
-            SpellSaveDC2 = SpellSaveDC2 + ProfBonus + Caster + CONmod;
-            SpellAtkBonus2 = "NA"
-        elseif savedDataTable.className2 ~= nil and savedDataTable.className2 == tostring("Battle Master Fighter (str)") then
-            Caster = 8
-            SpellSaveDC2 = SpellSaveDC2 + ProfBonus + Caster + STRmod;
-            SpellAtkBonus2 = "NA"
-        elseif savedDataTable.className2 ~= nil and savedDataTable.className2 == tostring("Battle Master Fighter (dex)") then
-            Caster = 8
-            SpellSaveDC2 = SpellSaveDC2 + ProfBonus + Caster + DEXmod;
-            SpellAtkBonus2 = "NA"
-        elseif savedDataTable.className2 ~= nil and savedDataTable.className2 == tostring("") or savedDataTable.className2 == tostring("Barbarian") or savedDataTable.className2 == tostring("Berserker Barbarian") or savedDataTable.className2 == tostring("Totem Warrior Barbarian") or savedDataTable.className2 == tostring("Ancestral Guardian Barbarian") or savedDataTable.className2 == tostring("Storm Herald Barbarian") or savedDataTable.className2 == tostring("Zealot Barbarian") or savedDataTable.className2 == tostring("Fighter") or savedDataTable.className2 == tostring("Champion Fighter") or savedDataTable.className2 == tostring("Arcane Archer Fighter") or savedDataTable.className2 == tostring("Cavalier Fighter") or savedDataTable.className2 == tostring("Samurai Fighter") or savedDataTable.className2 == tostring("Rogue") or savedDataTable.className2 == tostring("Thief Rogue") or savedDataTable.className2 == tostring("Assassin Rogue") or savedDataTable.className2 == tostring("Inquisitive Rogue") or savedDataTable.className2 == tostring("Mastermind Rogue") or savedDataTable.className2 == tostring("Scout Rogue") or savedDataTable.className2 == tostring("Swashbuckler Rogue") then
-            SpellSaveDC2 = "NA"
-            SpellAtkBonus2 = "NA"
-        end
-        self.editButton({index = displayNumberIndex["SpellSaveDC1DisplayIdx"], label = tostring(SpellSaveDC1)})
-        self.editButton({index = displayNumberIndex["SpellSaveDC2DisplayIdx"], label = tostring(SpellSaveDC2)})
-        self.editButton({index = displayNumberIndex["SpellAtkBonus1DisplayIdx"], label = tostring(SpellAtkBonus1)})
-        self.editButton({index = displayNumberIndex["SpellAtkBonus2DisplayIdx"], label = tostring(SpellAtkBonus2)})
-
         self.editButton({index = displayNumberIndex["raceNameDisplayIdx"], label = tostring(savedDataTable.raceName)})
         self.editButton({index = displayNumberIndex["infoSizeDisplayIdx"], label = tostring(savedDataTable.infoSize)})
         self.editButton({index = displayNumberIndex["VisionDisplayIdx"], label = tostring(savedDataTable.Vision)})
