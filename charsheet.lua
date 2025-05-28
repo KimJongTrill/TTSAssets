@@ -10,6 +10,8 @@ isSavedDataAvailable = false
 savedDataTable = {}
 allUiElementsLoaded = false
 
+local debug = true
+
 playerName = " "
 displayCol = {1,1,1}
 RollSaveSelected = 0
@@ -784,6 +786,28 @@ end
 --Dud function for displayNumber buttons
 function click_none() end
 
+function checkspellclass(class, playerclass)
+    local classes = {
+        ["mage"] = {
+            "",
+            "",
+        },
+        ["figher"] = {
+            "",
+            "",
+        },
+    }
+
+    local match = false
+    for k,v in pairs(classes[class]) do
+        if playerclass == v then
+            match = true
+        end
+    end
+
+    return match
+end
+
 function updateCalculatedValues()
     if allUiElementsLoaded == true then
         totalLVL = 0
@@ -1069,9 +1093,11 @@ function updateCalculatedValues()
         self.editButton({index = displayNumberIndex["StealthModDisplayIdx"], label = tostring(DEXmod)})
         self.editButton({index = displayNumberIndex["SurvivalModDisplayIdx"], label = tostring(WISmod)})
         PassivePerception = 10 + PerceptionTotal
+        if savedDataTable.PassiveModifier ~= nil then PassivePerception = PassivePerception + savedDataTable.PassiveModifier end
         self.editButton({index = displayNumberIndex["PassivePerceptionDisplayIdx"], label = tostring(PassivePerception)})
         --
         Initiative = DEXmod
+        if savedDataTable.InitModifier ~= nil then Initiative = Initiative + savedDataTable.InitModifier end
         self.editButton({index = displayNumberIndex["InitiativeDisplayIdx"], label = tostring(Initiative)})
         if HitDiceClass1Total == nil then HitDiceClass1Total = 0 end
         if HitDiceClass2Total == nil then HitDiceClass2Total = 0 end
@@ -1085,30 +1111,43 @@ function updateCalculatedValues()
         SpellAtkBonus2 = 0
         HitDiceClass1 = ""
         HitDiceClass2 = ""
-        if savedDataTable.className1 ~= nil and savedDataTable.className1 == tostring("Sorcerer") or savedDataTable.className1 == tostring("Wizard") then
-            HitDiceClass1 = tostring("d6")
-        elseif savedDataTable.className1 ~= nil and savedDataTable.className1 == tostring("Bard") or savedDataTable.className1 == tostring("Monk") or savedDataTable.className1 == tostring("Druid") or savedDataTable.className1 == tostring("Rogue") or savedDataTable.className1 == tostring("Cleric") or savedDataTable.className1 == tostring("Warlock") or savedDataTable.className1 == tostring("Artificer") then
-            HitDiceClass1 = tostring("d8")
-        elseif savedDataTable.className1 ~= nil and savedDataTable.className1 == tostring("Fighter") or savedDataTable.className1 == tostring("Paladin") or savedDataTable.className1 == tostring("Ranger") then
-            HitDiceClass1 = tostring("d10")
-        elseif savedDataTable.className1 ~= nil and savedDataTable.className1 == tostring("Barbarian") then
-            HitDiceClass1 = tostring("d12")
-        elseif savedDataTable.className1 ~= nil and savedDataTable.className1 == tostring("") then
-            HitDiceClass1 = tostring("")
+    
+        if savedDataTable.Atk1Modifier ~= nil then SpellAtkBonus1 = SpellAtkBonus1 + savedDataTable.Atk1Modifier end
+
+        HitDiceClasses = {
+            ["Sorcerer"] = "d6",
+            ["Wizard"] = "d6",
+            ["Bard"] = "d8",
+            ["Monk"] = "d8",
+            ["Druid"] = "d8",
+            ["Rogue"] = "d8",
+            ["Cleric"] = "d8",
+            ["Warlock"] = "d8",
+            ["Artificer"] = "d8",
+            ["Fighter"] = "d10",
+            ["Paladin"] = "d10",
+            ["Ranger"] = "d10",
+            ["Barbarian"] = "d12",
+            [""] = "",    
+        }
+        if savedDataTable.className1 ~= nil then
+            HitDiceClass1 = HitDiceClasses[savedDataTable.className1]
         end
-        if savedDataTable.className2 ~= nil and savedDataTable.className2 == tostring("Sorcerer") or savedDataTable.className2 == tostring("Wizard") then
-            HitDiceClass2 = tostring("d6")
-        elseif savedDataTable.className2 ~= nil and savedDataTable.className2 == tostring("Bard") or savedDataTable.className2 == tostring("Monk") or savedDataTable.className2 == tostring("Druid") or savedDataTable.className2 == tostring("Rogue") or savedDataTable.className2 == tostring("Cleric") or savedDataTable.className2 == tostring("Warlock") or savedDataTable.className2 == tostring("Artificer") then
-            HitDiceClass2 = tostring("d8")
-        elseif savedDataTable.className2 ~= nil and savedDataTable.className2 == tostring("Fighter") or savedDataTable.className2 == tostring("Paladin") or savedDataTable.className2 == tostring("Ranger") or 
-            HitDiceClass2 = tostring("d10")
-        elseif savedDataTable.className2 ~= nil and savedDataTable.className2 == tostring("Barbarian") then
-            HitDiceClass2 = tostring("d12")
-        elseif savedDataTable.className2 ~= nil and savedDataTable.className2 == tostring("") then
-            HitDiceClass2 = tostring("")
+
+        if savedDataTable.className2 ~= nil then
+            HitDiceClass2 = HitDiceClasses[savedDataTable.className2]
         end
+
         self.editButton({index = displayNumberIndex["HitDiceClass1DisplayIdx"], label = tostring(HitDiceClass1)})
         self.editButton({index = displayNumberIndex["HitDiceClass2DisplayIdx"], label = tostring(HitDiceClass2)})
+
+
+        --[[ if checkspellclass("mage", savedDataTable.classname1) then
+            Caster = 8
+            SpellSaveDC1 = SpellSaveDC1 + ProfBonus + Caster + INTmod;
+            SpellAtkBonus1 = SpellAtkBonus1 + ProfBonus + INTmod;
+        end ]]
+
         if savedDataTable.className1 ~= nil and savedDataTable.className1 == tostring("Wizard") or savedDataTable.className1 == tostring("Abjuration Wizard") or savedDataTable.className1 == tostring("Conjuration Wizard") or savedDataTable.className1 == tostring("Divination Wizard") or savedDataTable.className1 == tostring("Enchantment Wizard") or savedDataTable.className1 == tostring("Evocation Wizard") or savedDataTable.className1 == tostring("Illusion Wizard") or savedDataTable.className1 == tostring("Necromancy Wizard") or savedDataTable.className1 == tostring("Transmutation Wizard") or savedDataTable.className1 == tostring("War Magic Wizard") or savedDataTable.className1 == tostring("Eldritch Knight Fighter") or savedDataTable.className1 == tostring("Psi Warrior Fighter") or savedDataTable.className1 == tostring("Arcane Trickster Rogue") then
             Caster = 8
             SpellSaveDC1 = SpellSaveDC1 + ProfBonus + Caster + INTmod;
@@ -1265,31 +1304,23 @@ end
 
 
 function getColor(obj)
-    if obj == "Brown" then
-        return  {0.443, 0.231, 0.09}
-    elseif obj == "White" then
-        return  {1, 1, 1}
-    elseif obj == "Red" then
-        return  {0.856, 0.1, 0.094}
-    elseif obj == "Yellow" then
-        return  {0.905, 0.898, 0.172}
-    elseif obj == "Green" then
-        return  {0.192, 0.701, 0.168}
-    elseif obj == "Teal" then
-        return  {0.129, 0.694, 0.607}
-    elseif obj == "Blue" then
-        return  {0.118, 0.53, 1}
-    elseif obj == "Purple" then
-        return  {0.627, 0.125, 0.941}
-    elseif obj == "Pink" then
-        return  {0.96, 0.439, 0.807}
-    elseif obj == "Grey" then
-        return  {0.5, 0.5, 0.5}
-    elseif obj == "Orange" then
-        return  {0.956, 0.392, 0.113}
-    elseif obj == "Black" then
-        return {1, 1, 1}
-    end
+
+    colours = {
+        ["Brown"] = {0.443, 0.231, 0.09},
+        ["White"] = {1, 1, 1},
+        ["Red"] = {0.856, 0.1, 0.094},
+        ["Yellow"] = {0.905, 0.898, 0.172},
+        ["Green"] = {0.192, 0.701, 0.168},
+        ["Teal"] = {0.129, 0.694, 0.607},
+        ["Blue"] = {0.118, 0.53, 1},
+        ["Purple"] = {0.627, 0.125, 0.941},
+        ["Pink"] = {0.96, 0.439, 0.807},
+        ["Grey"] = {0.5, 0.5, 0.5},
+        ["Orange"] = {0.956, 0.392, 0.113},
+        ["Black"] = {1, 1, 1},
+    }
+
+    return colours[obj]
 end
 
 function updateRandomSeed()
@@ -1320,133 +1351,189 @@ function createButtons()
     })
 end
 
+local objects = {
+    ['str score'] = {
+        var = "STRscore",
+        type = "updateValue",
+    },
+    ['dex score'] = {
+        var = "DEXscore",
+        type = "updateValue",
+    },
+    ['con score'] = {
+        var = "CONscore",
+        type = "updateValue",
+    },
+    ['int score'] = {
+        var = "INTscore",
+        type = "updateValue",
+    },
+    ['wis score'] = {
+        var = "WISscore",
+        type = "updateValue",
+    },
+    -------------------------
+    ['cha score'] = {
+        var = "CHAscore",
+        type = "updateValue",
+    },
+    ['race'] = {
+        var = "raceName",
+        type = "updateValue",
+    },
+    ['vision'] = {
+        var = "Vision",
+        type = "updateValue",
+    },
+    ['darkvision'] = {
+        var = "Vision1",
+        type = "updateValue",
+    },
+    ['speed'] = {
+        var = "Speed",
+        type = "updateValue",
+    },
+    ['class1'] = {
+        var = "className1",
+        type = "updateValue",
+    },
+    ['class2'] = {
+        var = "className2",
+        type = "updateValue",
+    },
+    ['str save'] = {
+        var = "STRsaveCheck",
+        type = "updateValue",
+    },
+    ['dex save'] = {
+        var = "DEXsaveCheck",
+        type = "updateValue",
+    },
+    ['con save'] = {
+        var = "CONsaveCheck",
+        type = "updateValue",
+    },
+    ['int save'] = {
+        var = "INTsaveCheck",
+        type = "updateValue",
+    },
+    ['wis save'] = {
+        var = "WISsaveCheck",
+        type = "updateValue",
+    },
+    ['cha save'] = {
+        var = "CHAsaveCheck",
+        type = "updateValue",
+    },
+    ['acrobatics'] = {
+        var = "AcrobaticsCheck",
+        type = "updateValue",
+    },
+    ['animal handling'] = {
+        var = "AnimalHandlingCheck",
+        type = "updateValue",
+    },
+    ['arcana'] = {
+        var = "ArcanaCheck",
+        type = "updateValue",
+    },
+    ['athletics'] = {
+        var = "AthleticsCheck",
+        type = "updateValue",
+    },
+    ['deception'] = {
+        var = "DeceptionCheck",
+        type = "updateValue",
+    },
+    ['history'] = {
+        var = "HistoryCheck",
+        type = "updateValue",
+    },
+    ['insight'] = {
+        var = "InsightCheck",
+        type = "updateValue",
+    },
+    ['intimidation'] = {
+        var = "IntimidationCheck",
+        type = "updateValue",
+    },
+    ['investigation'] = {
+        var = "IntimidationCheck",
+        type = "updateValue",
+    },
+    ['medicine'] = {
+        var = "MedicineCheck",
+        type = "updateValue",
+    },
+    ['nature'] = {
+        var = "NatureCheck",
+        type = "updateValue",
+    },
+    ['perception'] = {
+        var = "PerceptionCheck",
+        type = "updateValue",
+    },
+    ['Performance'] = {
+        var = "PerformanceCheck",
+        type = "updateValue",
+    },
+    ['persuasion'] = {
+        var = "PersuasionCheck",
+        type = "updateValue",
+    },
+    ['religion'] = {
+        var = "ReligionCheck",
+        type = "updateValue",
+    },
+    ['sleight of hand'] = {
+        var = "SleightofHandCheck",
+        type = "updateValue",
+    },
+    ['stealth'] = {
+        var = "StealthCheck",
+        type = "updateValue",
+    },
+    ['survival'] = {
+        var = "SurvivalCheck",
+        type = "updateValue",
+    },
+    ['pp bonus'] = {
+        var = "PassiveModifier",
+        type = "updateModifier",
+    },
+    ['init bonus'] = {
+        var = "InitModifier",
+        type = "updateModifier",
+    },
+    ['atk1 bonus'] = {
+        var = "Atk1Modifier",
+        type = "updateModifier",
+    },
+}
+
 function onCollisionEnter(collision_info)
     obj = collision_info.collision_object
-    if obj.getName() == 'STR score' then
-        print('!Changed '..obj.getName()); savedDataTable.STRscore = tostring(obj.getDescription()); updateCalculatedValues(true); obj.destruct()
-    elseif obj.getName() == 'DEX score' then
-        print('!Changed '..obj.getName()); savedDataTable.DEXscore = tostring(obj.getDescription()); updateCalculatedValues(true); obj.destruct()
-    elseif obj.getName() == 'CON score' then
-        print('!Changed '..obj.getName()); savedDataTable.CONscore = tostring(obj.getDescription()); updateCalculatedValues(true); obj.destruct()
-    elseif obj.getName() == 'INT score' then
-        print('!Changed '..obj.getName()); savedDataTable.INTscore = tostring(obj.getDescription()); updateCalculatedValues(true); obj.destruct()
-    elseif obj.getName() == 'WIS score' then
-        print('!Changed '..obj.getName()); savedDataTable.WISscore = tostring(obj.getDescription()); updateCalculatedValues(true); obj.destruct()
-    elseif obj.getName() == 'CHA score' then
-        print('!Changed '..obj.getName()); savedDataTable.CHAscore = tostring(obj.getDescription()); updateCalculatedValues(true); obj.destruct()
-    elseif obj.getName() == 'Race' then
-        print('!Race: '..obj.getDescription()); savedDataTable.raceName = tostring(obj.getDescription()); updateCalculatedValues(true); obj.destruct()
-    elseif obj.getName() == 'Size' then
-        print('!Size: '..obj.getDescription()); savedDataTable.infoSize = tostring(obj.getDescription()); updateCalculatedValues(true); obj.destruct()
-    elseif obj.getName() == 'Vision' then
-        print('!Vision: '..obj.getDescription()); savedDataTable.Vision = tostring(obj.getDescription()); updateCalculatedValues(true); obj.destruct()
-    elseif obj.getName() == 'Darkvision' then
-        print('!Darkvision: '..obj.getDescription())
-        if obj.getDescription() == 'x' then savedDataTable.Vision1=string.char(10008) else Vision1 = tostring(obj.getDescription()) end
-        updateCalculatedValues(true); obj.destruct()
-    elseif obj.getName() == 'Speed' then
-        print('!Speed: '..obj.getDescription()); savedDataTable.Speed = tostring(obj.getDescription()); updateCalculatedValues(true); obj.destruct()
-    elseif obj.getName() == 'Class1' then
-        print('!1st Class: '..obj.getDescription()); savedDataTable.className1 = tostring(obj.getDescription()); updateCalculatedValues(true); obj.destruct()
-    elseif obj.getName() == 'Class2' then
-        print('!2nd Class: '..obj.getDescription()); savedDataTable.className2 = tostring(obj.getDescription()); updateCalculatedValues(true); obj.destruct()
-    elseif obj.getName() == 'STR Saving Throw' then
-        print('!STR Saving Throw'); savedDataTable.STRsaveCheck=string.char(10008); updateCalculatedValues(true); obj.destruct()
-    elseif obj.getName() == 'DEX Saving Throw' then
-        print('!DEX Saving Throw'); savedDataTable.DEXsaveCheck=string.char(10008); updateCalculatedValues(true); obj.destruct()
-    elseif obj.getName() == 'CON Saving Throw' then
-        print('!CON Saving Throw'); savedDataTable.CONsaveCheck=string.char(10008); updateCalculatedValues(true); obj.destruct()
-    elseif obj.getName() == 'INT Saving Throw' then
-        print('!INT Saving Throw'); savedDataTable.INTsaveCheck=string.char(10008); updateCalculatedValues(true); obj.destruct()
-    elseif obj.getName() == 'WIS Saving Throw' then
-        print('!WIS Saving Throw'); savedDataTable.WISsaveCheck=string.char(10008); updateCalculatedValues(true); obj.destruct()
-    elseif obj.getName() == 'CHA Saving Throw' then
-        print('!CHA Saving Throw'); savedDataTable.CHAsaveCheck=string.char(10008); updateCalculatedValues(true); obj.destruct()
-    elseif obj.getName() == 'REMOVE Saving Throw' then
-        print('!REMOVE Saving Throw')
-        if obj.getDescription() == 'STR' then savedDataTable.STRsaveCheck=""
-        elseif obj.getDescription() == 'DEX' then savedDataTable.DEXsaveCheck=""
-        elseif obj.getDescription() == 'CON' then savedDataTable.CONsaveCheck=""
-        elseif obj.getDescription() == 'INT' then savedDataTable.INTsaveCheck=""
-        elseif obj.getDescription() == 'WIS' then savedDataTable.WISsaveCheck=""
-        elseif obj.getDescription() == 'CHA' then savedDataTable.CHAsaveCheck=""
+    objname = obj.getName()
+    objnamelower = string.lower(objname)
+    objdesc = obj.getDescription()
+
+    for k,v in pairs(objects) do
+        if k == objnamelower then
+            if v.type == "updateValue" then
+                if objdesc == "x" then objdesc = string.char(10008) end
+                if debug then print('!Changed '..objname) end
+                savedDataTable[v.var] = objdesc
+                updateCalculatedValues()
+                obj.destruct()
+            end
+
+            if v.type == "updateModifier" then
+                if objdesc == nil or not tonumber(objdesc) then print("!Error not a number!") return end
+                if savedDataTable[v.var] == nil or savedDataTable[v.var] == "NA" then savedDataTable[v.var] = 0 end
+                savedDataTable[v.var] = savedDataTable[v.var] + objdesc
+                updateCalculatedValues()
+                obj.destruct()
+            end
         end
-        updateCalculatedValues(true); obj.destruct()
-    elseif obj.getName() == 'Acrobatics' then
-        print('!Skill: '..obj.getName())
-        if obj.getDescription() == 'x' then savedDataTable.AcrobaticsCheck=string.char(10008) else savedDataTable.AcrobaticsCheck = tostring(obj.getDescription()) end
-        updateCalculatedValues(true); obj.destruct()
-    elseif obj.getName() == 'Animal Handling' then
-        print('!Skill: '..obj.getName())
-        if obj.getDescription() == 'x' then savedDataTable.AnimalHandlingCheck=string.char(10008) else savedDataTable.AnimalHandlingCheck = tostring(obj.getDescription()) end
-        updateCalculatedValues(true); obj.destruct()
-    elseif obj.getName() == 'Arcana' then
-        print('!Skill: '..obj.getName())
-        if obj.getDescription() == 'x' then savedDataTable.ArcanaCheck=string.char(10008) else savedDataTable.ArcanaCheck = tostring(obj.getDescription()) end
-        updateCalculatedValues(true); obj.destruct()
-    elseif obj.getName() == 'Athletics' then
-        print('!Skill: '..obj.getName())
-        if obj.getDescription() == 'x' then savedDataTable.AthleticsCheck=string.char(10008) else savedDataTable.AthleticsCheck = tostring(obj.getDescription()) end
-        updateCalculatedValues(true); obj.destruct()
-    elseif obj.getName() == 'Deception' then
-        print('!Skill: '..obj.getName())
-        if obj.getDescription() == 'x' then savedDataTable.DeceptionCheck=string.char(10008) else savedDataTable.DeceptionCheck = tostring(obj.getDescription()) end
-        updateCalculatedValues(true); obj.destruct()
-    elseif obj.getName() == 'History' then
-        print('!Skill: '..obj.getName())
-        if obj.getDescription() == 'x' then savedDataTable.HistoryCheck=string.char(10008) else savedDataTable.HistoryCheck = tostring(obj.getDescription()) end
-        updateCalculatedValues(true); obj.destruct()
-    elseif obj.getName() == 'Insight' then
-        print('!Skill: '..obj.getName())
-        if obj.getDescription() == 'x' then savedDataTable.InsightCheck=string.char(10008) else savedDataTable.InsightCheck = tostring(obj.getDescription()) end
-        updateCalculatedValues(true); obj.destruct()
-    elseif obj.getName() == 'Intimidation' then
-        print('!Skill: '..obj.getName())
-        if obj.getDescription() == 'x' then savedDataTable.IntimidationCheck=string.char(10008) else savedDataTable.IntimidationCheck = tostring(obj.getDescription()) end
-        updateCalculatedValues(true); obj.destruct()
-    elseif obj.getName() == 'Investigation' then
-        print('!Skill: '..obj.getName())
-        if obj.getDescription() == 'x' then savedDataTable.InvestigationCheck=string.char(10008) else savedDataTable.InvestigationCheck = tostring(obj.getDescription()) end
-        updateCalculatedValues(true); obj.destruct()
-    elseif obj.getName() == 'Medicine' then
-        print('!Skill: '..obj.getName())
-        if obj.getDescription() == 'x' then savedDataTable.MedicineCheck=string.char(10008) else savedDataTable.MedicineCheck = tostring(obj.getDescription()) end
-        updateCalculatedValues(true); obj.destruct()
-    elseif obj.getName() == 'Nature' then
-        print('!Skill: '..obj.getName())
-        if obj.getDescription() == 'x' then savedDataTable.NatureCheck=string.char(10008) else savedDataTable.NatureCheck = tostring(obj.getDescription()) end
-        updateCalculatedValues(true); obj.destruct()
-    elseif obj.getName() == 'Perception' then
-        print('!Skill: '..obj.getName())
-        if obj.getDescription() == 'x' then savedDataTable.PerceptionCheck=string.char(10008) else savedDataTable.PerceptionCheck = tostring(obj.getDescription()) end
-        updateCalculatedValues(true); obj.destruct()
-    elseif obj.getName() == 'Performance' then
-        print('!Skill: '..obj.getName())
-        if obj.getDescription() == 'x' then savedDataTable.PerformanceCheck=string.char(10008) else savedDataTable.PerformanceCheck = tostring(obj.getDescription()) end
-        updateCalculatedValues(true); obj.destruct()
-    elseif obj.getName() == 'Persuasion' then
-        print('!Skill: '..obj.getName())
-        if obj.getDescription() == 'x' then savedDataTable.PersuasionCheck=string.char(10008) else savedDataTable.PersuasionCheck = tostring(obj.getDescription()) end
-        updateCalculatedValues(true); obj.destruct()
-    elseif obj.getName() == 'Religion' then
-        print('!Skill: '..obj.getName())
-        if obj.getDescription() == 'x' then savedDataTable.ReligionCheck=string.char(10008) else savedDataTable.ReligionCheck = tostring(obj.getDescription()) end
-        updateCalculatedValues(true); obj.destruct()
-    elseif obj.getName() == 'Sleight of Hand' then
-        print('!Skill: '..obj.getName())
-        if obj.getDescription() == 'x' then savedDataTable.SleightofHandCheck=string.char(10008) else savedDataTable.SleightofHandCheck = tostring(obj.getDescription()) end
-        updateCalculatedValues(true); obj.destruct()
-    elseif obj.getName() == 'Stealth' then
-        print('!Skill: '..obj.getName())
-        if obj.getDescription() == 'x' then savedDataTable.StealthCheck=string.char(10008) else savedDataTable.StealthCheck = tostring(obj.getDescription()) end
-        updateCalculatedValues(true); obj.destruct()
-    elseif obj.getName() == 'Survival' then
-        print('!Skill: '..obj.getName())
-        if obj.getDescription() == 'x' then savedDataTable.SurvivalCheck=string.char(10008) else savedDataTable.SurvivalCheck = tostring(obj.getDescription()) end
-        updateCalculatedValues(true); obj.destruct()
-    -- item cards
-    --elseif self.resting and obj.resting and obj.getDescription() ~= 'larmor' then
-    --    if obj.getDescription() ~= "_saveONEall" then ItemSaveAll = 1 elseif obj.getDescription() ~= "_saveTWOall" then ItemSaveAll = 2 end
-    --    updateCalculatedValues(false)
     end
 end
